@@ -12,8 +12,10 @@ import json
 import urllib
 
 #initializations
-apikey='RGAPI-79359a94-eff0-4172-a46e-5cc059c730dc'
+apikey='RGAPI-9a6a7643-8ef8-4795-98bf-e648cc8ebb26'
 champId={}
+champIdInv={}
+champAlph=()
 
 """
 example call
@@ -58,10 +60,32 @@ class lolapi:
     
     
     
-    
-    
 #initialize object and useful lists
 b=lolapi(apikey)
 championsFull = b.apiCall('static-data','champions')['data']
 for champ in championsFull:
     champId[champ] = championsFull[champ]['id']
+    champIdInv[championsFull[champ]['id']]=champ
+champAlf = sorted(championsFull)
+    
+
+
+def listNeededTokens(summonerName,api=b):
+    m5 = {}
+    m6 = {}
+    for champ in api.allMasteries(summonerName):
+        if champ['championLevel'] == 5 and champ['tokensEarned'] != 2:
+            m5[champIdInv[champ['championId']]] = 2-champ['tokensEarned']
+        elif champ['championLevel'] == 6 and champ['tokensEarned'] != 3:
+            m6[champIdInv[champ['championId']]] = 3-champ['tokensEarned']
+    print('Mastery 6:\n')
+    for champ in sorted(m6):
+        print(champ + ' - ' + str(m6[champ]))
+    print('\n\nMastery 5:\n')
+    for champ in sorted(m5):
+        print(champ + ' - ' + str(m5[champ]))
+    return
+
+
+
+
